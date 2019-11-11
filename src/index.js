@@ -20,16 +20,6 @@ The object contains the 'description' and a 'status' keys.
 */
 
 class App extends React.Component {
-
-    render() {
-        return (
-            <Header />
-        );
-    }
-}
-
-
-class Header extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -37,18 +27,18 @@ class Header extends React.Component {
             tasks: [],
         };
 
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.onTaskSubmit = this.onTaskSubmit.bind(this);
     }
 
-    handleChange(event) {
+    handleInputChange(input) {
         this.setState({
-            value: event.target.value,
+            value: input,
         });
     }
 
-    handleSubmit(event) {
-        event.preventDefault();
+    onTaskSubmit() {
+        //event.preventDefault();
         
         // store the user input.
         const description = this.state.value;
@@ -66,10 +56,40 @@ class Header extends React.Component {
 
     render() {
         return (
+            <Header 
+                value={this.state.value}
+                onSubmit={this.onTaskSubmit}
+                onInputChange={this.handleInputChange}
+            />
+        );
+    }
+}
+
+
+class Header extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleChange(event) {
+        this.props.onInputChange(event.target.value);
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();
+      
+        this.props.onSubmit();
+    }
+
+    render() {
+        return (
             <div>
                 <form onSubmit={this.handleSubmit}>
                     <label>Hello Kevin <br/>
-                        <input type="text" value={this.state.value} onChange={this.handleChange}/>
+                        <input type="text" value={this.props.value} onChange={this.handleChange}/>
                     </label>
                     <input type="submit" value="Submit"/>
                 </form>
