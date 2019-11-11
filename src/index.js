@@ -16,10 +16,18 @@ The object contains the 'description' and a 'status' keys.
 */
 
 /* Unsure of:
-1. Unclear on how to grab the data when you submit the form. 
-2. Lifting state. Creating a diagram to visualize the flow of data would be a great learning tool. 
-3. 
+1. Lifting state. Creating a diagram to visualize the flow of data would be a great learning tool.  
 */
+
+class App extends React.Component {
+
+    render() {
+        return (
+            <Header />
+        );
+    }
+}
+
 
 class Header extends React.Component {
     constructor(props) {
@@ -70,6 +78,6 @@ class Header extends React.Component {
     }
 }
 
-ReactDOM.render(<Header />, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById('root'));
 
 
