@@ -2,26 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-/*
-1. The Header component contains a form field. User submit a task.
-2. Submitted task gets lifted to the parent component, App, and App passes that data to the Body component.
-3. You setState on the App component based on the previous state, appending the task as an object to the App component's state. The App passes down the tasks as props to the Body component.
-The object contains the 'description' and a 'status' keys. 
-4. You map over the tasks in the Body's props and create list items. (I think this is where destructuring in the parameter comes into play)
-- These list items have the description, status, and delete functionality. Clicking on them will toggle the status.
-5. The Footer does three things:
-- Displays the amount of 'Active' tasks remain.
-- Provides filter functionality 'All', 'Active', 'Completed'
-- Button to 'Clear Completed'
-*/
-
-/* Unsure of:
-1. Lifting state. Creating a diagram to visualize the flow of data would be a great learning tool.  
-*/
-
-
-
-
 class Header extends React.Component {
     constructor(props) {
         super(props);
@@ -44,7 +24,7 @@ class Header extends React.Component {
         return (
             <div>
                 <form onSubmit={this.handleSubmit}>
-                    <label>Hello Kevin <br/>
+                    <label>Enter a new task <br/>
                         <input type="text" value={this.props.value} onChange={this.handleChange}/>
                     </label>
                     <input type="submit" value="Submit"/>
@@ -78,11 +58,32 @@ class Body extends React.Component {
     }
 }
 
+class Footer extends React.Component {
+    render() {
+        return(
+            <div>
+                <div>
+                    
+                </div>
+                
+                <div>
+                    
+                </div>
+
+                <div>
+                
+                </div>
+            </div>
+        )
+    }
+}
+
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             value: '',
+            filter: 'All',
             tasks: [],
         };
 
@@ -122,6 +123,10 @@ class App extends React.Component {
                     onInputChange={this.handleInputChange}
                 />
                 <Body 
+                    tasks={this.state.tasks}
+                    filter={this.state.filter}
+                />
+                <Footer
                     tasks={this.state.tasks}
                 />
             </React.Fragment>
