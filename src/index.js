@@ -19,6 +19,65 @@ The object contains the 'description' and a 'status' keys.
 1. Lifting state. Creating a diagram to visualize the flow of data would be a great learning tool.  
 */
 
+
+
+
+class Header extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleChange(event) {
+        this.props.onInputChange(event.target.value);
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();
+      
+        this.props.onSubmit();
+    }
+
+    render() {
+        return (
+            <div>
+                <form onSubmit={this.handleSubmit}>
+                    <label>Hello Kevin <br/>
+                        <input type="text" value={this.props.value} onChange={this.handleChange}/>
+                    </label>
+                    <input type="submit" value="Submit"/>
+                </form>
+            </div>
+        );
+    }
+}
+
+class Body extends React.Component {
+    /*constructor(props) {
+        super(props);
+
+    }*/
+
+    render() {
+        return(
+            <div>
+                <ul>
+                    {this.props.tasks.map((task, index) => {
+                        const {description/*, status*/} = task;
+
+                        return (
+                            <li key={index}>{description}</li>
+                        )
+                    })}
+                    
+                </ul>
+            </div>
+        )
+    }
+}
+
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -56,44 +115,16 @@ class App extends React.Component {
 
     render() {
         return (
-            <Header 
-                value={this.state.value}
-                onSubmit={this.onTaskSubmit}
-                onInputChange={this.handleInputChange}
-            />
-        );
-    }
-}
-
-
-class Header extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    handleChange(event) {
-        this.props.onInputChange(event.target.value);
-    }
-
-    handleSubmit(event) {
-        event.preventDefault();
-      
-        this.props.onSubmit();
-    }
-
-    render() {
-        return (
-            <div>
-                <form onSubmit={this.handleSubmit}>
-                    <label>Hello Kevin <br/>
-                        <input type="text" value={this.props.value} onChange={this.handleChange}/>
-                    </label>
-                    <input type="submit" value="Submit"/>
-                </form>
-            </div>
+            <React.Fragment>
+                <Header 
+                    value={this.state.value}
+                    onSubmit={this.onTaskSubmit}
+                    onInputChange={this.handleInputChange}
+                />
+                <Body 
+                    tasks={this.state.tasks}
+                />
+            </React.Fragment>
         );
     }
 }
