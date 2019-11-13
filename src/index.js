@@ -47,7 +47,7 @@ class Body extends React.Component {
         // Pass a reference to App. It grabs the index and uses that to alter state. 
         // have a funtion that returns the event.target.value?
         //console.log(event.target.value);
-        
+        //console.log(e.target);
         this.props.onTaskClick(e.currentTarget.id);
         //console.log(event.currentTarget.id);
     }
@@ -109,6 +109,20 @@ class App extends React.Component {
         this.handleInputChange = this.handleInputChange.bind(this);
         this.onTaskSubmit = this.onTaskSubmit.bind(this);
         this.toggleStatus = this.toggleStatus.bind(this);
+        this.grabStatus = this.grabStatus.bind(this);
+    }
+
+    grabStatus(position) {
+        let status = this.state.tasks[position].status;
+
+        console.log(`The status is ${this.state.tasks[position].status}`);
+        if (status === 'Active') {
+            status = 'Complete';
+        } else {
+            status = 'Active'
+        } 
+
+        return status;
     }
 
     handleInputChange(input) {
@@ -135,9 +149,13 @@ class App extends React.Component {
     }
 
     toggleStatus = (dataFromChild) => {
+        //e.currentTarget.id
+        //let taskIndex = dataFromChild.currentTarget.id;
+        //let taskElement = dataFromChild.target;
+
         console.log(dataFromChild);
         this.setState(({tasks}) => ({
-            tasks: tasks.map((task, index) => (index === 0 ? { ...task, status: "Complete" } : task)),
+            tasks: tasks.map((task, index) => (index == dataFromChild ? { ...task, status: this.grabStatus(dataFromChild) } : task)),
         }));
     }
 
