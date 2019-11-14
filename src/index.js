@@ -115,16 +115,13 @@ class App extends React.Component {
     }
 
     grabStatus(position) {
-        let status = this.state.tasks[position].status;
-
-        console.log(`The status is ${this.state.tasks[position].status}`);
-        if (status === 'Active') {
-            status = 'Complete';
+        let currentTask = this.state.tasks.filter(task => task.id == position);
+        
+        if (currentTask[0].status === 'Active') {
+            return 'Complete';
         } else {
-            status = 'Active'
+            return 'Active';
         } 
-
-        return status;
     }
 
     handleInputChange(input) {
@@ -155,7 +152,7 @@ class App extends React.Component {
 
     toggleStatus = (dataFromChild) => {
         //e.currentTarget.id
-        let taskIndex = dataFromChild.currentTarget.id; // Checks for which task the user clicked. 
+        let taskId = dataFromChild.currentTarget.id; // Checks for which task the user clicked. 
         let taskClass = dataFromChild.target.className; // Use this to check if the user clicked on the delete button.
 
         console.log(dataFromChild.currentTarget.id);
@@ -167,7 +164,7 @@ class App extends React.Component {
             console.log(newList);
         } else {
             this.setState(({tasks}) => ({
-                tasks: tasks.map((task, index) => (index == taskIndex ? { ...task, status: this.grabStatus(taskIndex) } : task)),
+                tasks: tasks.map((task) => (task.id == taskId ? { ...task, status: this.grabStatus(taskId) } : task)),
             }));
         }
 
