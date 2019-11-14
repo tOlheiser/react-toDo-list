@@ -45,12 +45,7 @@ class Body extends React.Component {
     //let counter = this.state.counter + 1;
 
     handleTaskClick(e) {
-        // Pass a reference to App. It grabs the index and uses that to alter state. 
-        // have a funtion that returns the event.target.value?
-        //console.log(event.target.value);
-        //console.log(e.target);
         this.props.onTaskClick(e);
-        //console.log(event.currentTarget.id);
     }
 
     render() {
@@ -110,13 +105,13 @@ class App extends React.Component {
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.onTaskSubmit = this.onTaskSubmit.bind(this);
-        this.toggleStatus = this.toggleStatus.bind(this);
+        this.modifyTask = this.modifyTask.bind(this);
         this.grabStatus = this.grabStatus.bind(this);
     }
 
     grabStatus(position) {
         let currentTask = this.state.tasks.filter(task => task.id == position);
-        
+
         if (currentTask[0].status === 'Active') {
             return 'Complete';
         } else {
@@ -131,7 +126,6 @@ class App extends React.Component {
     }
 
     onTaskSubmit() {
-        //event.preventDefault();
         
         // store the user input.
         const description = this.state.value;
@@ -150,30 +144,30 @@ class App extends React.Component {
         }) 
     }
 
-    toggleStatus = (dataFromChild) => {
-        //e.currentTarget.id
+    modifyTask = (dataFromChild) => {
         let taskId = dataFromChild.currentTarget.id; // Checks for which task the user clicked. 
         let taskClass = dataFromChild.target.className; // Use this to check if the user clicked on the delete button.
 
-        console.log(dataFromChild.currentTarget.id);
+        // Did the user click the delete button?
         if (taskClass == "deleteBtn") {
-            // remove task from state.
-            let newList = this.state.tasks;
-            newList = newList.filter((list) => list.status == 'Active'); //Works
-            //console.log(`taskIndex: ${taskIndex}`);
-            console.log(newList);
+            // Create a list which doesn't contain the item the user would like to delete. 
+            let newList = this.state.tasks.filter(task => task.id != taskId);
+
+            // Assign that list to the tasks key.
+            this.setState({
+                tasks: newList
+            });
+        // Otherwise, toggle the status of the item.
         } else {
             this.setState(({tasks}) => ({
+                // Map over the tasks and check to see if the task ID is equal to the value passed in.
+                // If it is equal, toggle the status by using the 'grabStatus' function.
                 tasks: tasks.map((task) => (task.id == taskId ? { ...task, status: this.grabStatus(taskId) } : task)),
             }));
         }
 
         
     }
-
-    /* 
-            tasks: tasks.map((task, index) => (index == taskIndex ? { ...task, status: this.grabStatus(taskIndex) } : task)),
-    */
 
     render() {
         return (
@@ -186,7 +180,7 @@ class App extends React.Component {
                 <Body 
                     tasks={this.state.tasks}
                     filter={this.state.filter}
-                    onTaskClick={this.toggleStatus}
+                    onTaskClick={this.modifyTask}
                     onDeleteClick={this.deleteTask}
                 />
                 <Footer
