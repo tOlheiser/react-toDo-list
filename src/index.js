@@ -39,30 +39,31 @@ class Body extends React.Component {
         super(props);
 
         this.handleTaskClick = this.handleTaskClick.bind(this);
+        //let counter = this.state.counter + 1;
     }
 
-    //
+    //let counter = this.state.counter + 1;
 
     handleTaskClick(e) {
         // Pass a reference to App. It grabs the index and uses that to alter state. 
         // have a funtion that returns the event.target.value?
         //console.log(event.target.value);
         //console.log(e.target);
-        this.props.onTaskClick(e.currentTarget.id);
+        this.props.onTaskClick(e);
         //console.log(event.currentTarget.id);
     }
 
     render() {
-
         return(
             <div className="section center body">
                 <ul className="red flex column">
-                    {this.props.tasks.map((task, index) => {
-                        const {description/*, status*/} = task;
-
+                    {this.props.tasks.map((task) => {
+                        const {description, id} = task;
+                        
                         return (
-                            <li key={index} className="flex taskItem vert-center" id={index} onClick={(e) => this.handleTaskClick(e)}>
-                            <button className="taskBtn">Toggle Status</button><span className="flex desc">{description}</span><button className="taskBtn">Delete</button>
+                            
+                            <li className="flex taskItem vert-center" key={id} id={id} onClick={(e) => this.handleTaskClick(e)}>
+                            <button className="taskBtn">Toggle Status</button><span className="flex desc">{description}</span><button className="deleteBtn">Delete</button>
                             </li>
                         )
                     })}
@@ -101,6 +102,7 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            counter: 0,
             value: '',
             filter: 'All',
             tasks: [],
@@ -136,28 +138,45 @@ class App extends React.Component {
         
         // store the user input.
         const description = this.state.value;
+        const counter = this.state.counter + 1;
 
         this.setState(({tasks}) => {
             return {
+                counter: counter,
                 value: '', // reset the input.
                 tasks: [...tasks, {
+                    id: counter,
                     description,
                     status: 'Active'
-                }]
+                }] // Add ID
             }
         }) 
     }
 
     toggleStatus = (dataFromChild) => {
         //e.currentTarget.id
-        //let taskIndex = dataFromChild.currentTarget.id;
-        //let taskElement = dataFromChild.target;
+        let taskIndex = dataFromChild.currentTarget.id; // Checks for which task the user clicked. 
+        let taskClass = dataFromChild.target.className; // Use this to check if the user clicked on the delete button.
 
-        console.log(dataFromChild);
-        this.setState(({tasks}) => ({
-            tasks: tasks.map((task, index) => (index == dataFromChild ? { ...task, status: this.grabStatus(dataFromChild) } : task)),
-        }));
+        console.log(dataFromChild.currentTarget.id);
+        if (taskClass == "deleteBtn") {
+            // remove task from state.
+            let newList = this.state.tasks;
+            newList = newList.filter((list) => list.status == 'Active'); //Works
+            //console.log(`taskIndex: ${taskIndex}`);
+            console.log(newList);
+        } else {
+            this.setState(({tasks}) => ({
+                tasks: tasks.map((task, index) => (index == taskIndex ? { ...task, status: this.grabStatus(taskIndex) } : task)),
+            }));
+        }
+
+        
     }
+
+    /* 
+            tasks: tasks.map((task, index) => (index == taskIndex ? { ...task, status: this.grabStatus(taskIndex) } : task)),
+    */
 
     render() {
         return (
