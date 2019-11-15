@@ -108,7 +108,7 @@ class Footer extends React.Component {
                     </div>
 
                     <div className="flex">
-                        <button className="clear-btn" onClick={this.props.onClearClick}>Clear completed [{this.props.tasks.filter(task => task.status == "Completed").length}]</button>
+                        {this.props.tasks.filter(({status}) => status == "Completed").length > 0 && <button className="clear-btn" onClick={this.props.onClearClick}>Clear completed [{this.props.tasks.filter(task => task.status == "Completed").length}]</button>}
                     </div>
                 </div>
             </div>
