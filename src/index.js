@@ -47,14 +47,8 @@ class Body extends React.Component {
     }
 
     filterList() {
-
-        if (this.props.filter == "All") {
-            return this.props.tasks.filter((task) => task.status == "Active" || task.status == "Complete");    
-        } else if (this.props.filter == "Active") {
-            return this.props.tasks.filter(task => task.status == "Active");    
-        } else {
-            return this.props.tasks.filter(task => task.status == "Complete");    
-        }
+        const { filter, tasks} = this.props;
+        return filter === "All" ? tasks : tasks.filter(({status}) => status == filter);
     }
 
     render() {
@@ -114,7 +108,7 @@ class Footer extends React.Component {
                     </div>
 
                     <div className="flex">
-                        <button className="clear-btn" onClick={this.props.onClearClick}>Clear completed [{this.props.tasks.filter(task => task.status == "Complete").length}]</button>
+                        <button className="clear-btn" onClick={this.props.onClearClick}>Clear completed [{this.props.tasks.filter(task => task.status == "Completed").length}]</button>
                     </div>
                 </div>
             </div>
@@ -143,10 +137,10 @@ class App extends React.Component {
     grabStatus(position) {
         let currentTask = this.state.tasks.filter(task => task.id == position);
 
-        if (currentTask[0].status === 'Active') {
-            return 'Complete';
+        if (currentTask[0].status === "Active") {
+            return "Completed";
         } else {
-            return 'Active';
+            return "Active";
         } 
     }
 
@@ -169,7 +163,7 @@ class App extends React.Component {
                 tasks: [...tasks, {
                     id: counter,
                     description,
-                    status: 'Active'
+                    status: "Active"
                 }] // Add ID
             }
         }) 
@@ -201,7 +195,7 @@ class App extends React.Component {
     clearTasks() {
         this.setState({
             filter: "All",
-            tasks: this.state.tasks.filter(task => task.status == 'Active')
+            tasks: this.state.tasks.filter(task => task.status == "Active")
         })
     }
 
