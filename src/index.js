@@ -21,13 +21,16 @@ class Header extends React.Component {
     }
 
     render() {
+        const { value } = this.props;
+        const isEnabled = value.length > 0;
+
         return (
             <div className="section center header">
                 <form onSubmit={this.handleSubmit} className="flex red">
                     
                         <input type="text" placeholder="Enter a task" value={this.props.value} onChange={this.handleChange} className="taskInput" />
                     
-                    <input type="submit" value="Submit" className="taskSubmit" />
+                    <input type="submit" value="Submit" className="taskSubmit" disabled={!isEnabled}/>
                 </form>
             </div>
         );
