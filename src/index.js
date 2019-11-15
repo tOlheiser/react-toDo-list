@@ -75,6 +75,7 @@ class Footer extends React.Component {
 
         this.getActiveTasks = this.getActiveTasks.bind(this);
         this.handleClearClick = this.handleClearClick.bind(this);
+        this.handleFilterClick = this.handleFilterClick.bind(this);
     }
 
     getActiveTasks() {
@@ -83,6 +84,11 @@ class Footer extends React.Component {
 
     handleClearClick() {
         this.props.onClearClick();
+    }
+
+    handleFilterClick(event) {
+        //console.log(event.target.innerHTML);
+        this.props.onFilterClick(event.target.innerHTML);
     }
 
     render() {
@@ -95,9 +101,9 @@ class Footer extends React.Component {
                     </div>
                     
                     <div className="flex">
-                        <button className="btn">All</button>
-                        <button className="btn around">Active</button>
-                        <button className="btn">Completed</button>
+                        <button className="btn" onClick={this.handleFilterClick}>All</button>
+                        <button className="btn around" onClick={this.handleFilterClick}>Active</button>
+                        <button className="btn" onClick={this.handleFilterClick}>Completed</button>
                     </div>
 
                     <div className="flex">
@@ -124,6 +130,7 @@ class App extends React.Component {
         this.modifyTask = this.modifyTask.bind(this);
         this.grabStatus = this.grabStatus.bind(this);
         this.clearTasks = this.clearTasks.bind(this);
+        this.filterList = this.filterList.bind(this);
     }
 
     grabStatus(position) {
@@ -191,6 +198,12 @@ class App extends React.Component {
         })
     }
 
+    filterList(filter) {
+        this.setState({
+            filter
+        });
+    }
+
     render() {
         return (
             <div className="container">
@@ -208,6 +221,7 @@ class App extends React.Component {
                 <Footer
                     tasks={this.state.tasks}
                     onClearClick={this.clearTasks}
+                    onFilterClick={this.filterList}
                 />
             </div>
         );
