@@ -39,24 +39,32 @@ class Body extends React.Component {
         super(props);
 
         this.handleTaskClick = this.handleTaskClick.bind(this);
-        //let counter = this.state.counter + 1;
+        this.filterList = this.filterList.bind(this);
     }
-
-    //let counter = this.state.counter + 1;
 
     handleTaskClick(e) {
         this.props.onTaskClick(e);
+    }
+
+    filterList() {
+
+        if (this.props.filter == "All") {
+            return this.props.tasks.filter((task) => task.status == "Active" || task.status == "Complete");    
+        } else if (this.props.filter == "Active") {
+            return this.props.tasks.filter(task => task.status == "Active");    
+        } else {
+            return this.props.tasks.filter(task => task.status == "Complete");    
+        }
     }
 
     render() {
         return(
             <div className="section center body">
                 <ul className="red flex column">
-                    {this.props.tasks.map((task) => {
+                {this.filterList().map((task) => {
                         const {description, id} = task;
                         
                         return (
-                            
                             <li className="flex taskItem vert-center" key={id} id={id} onClick={(e) => this.handleTaskClick(e)}>
                             <button className="taskBtn">Toggle Status</button><span className="flex desc">{description}</span><button className="deleteBtn">Delete</button>
                             </li>
@@ -87,7 +95,6 @@ class Footer extends React.Component {
     }
 
     handleFilterClick(event) {
-        //console.log(event.target.innerHTML);
         this.props.onFilterClick(event.target.innerHTML);
     }
 
@@ -130,7 +137,7 @@ class App extends React.Component {
         this.modifyTask = this.modifyTask.bind(this);
         this.grabStatus = this.grabStatus.bind(this);
         this.clearTasks = this.clearTasks.bind(this);
-        this.filterList = this.filterList.bind(this);
+        this.setFilter = this.setFilter.bind(this);
     }
 
     grabStatus(position) {
@@ -192,13 +199,13 @@ class App extends React.Component {
     }
 
     clearTasks() {
-        //let taskList = this.state.tasks.filter(task => task.status == 'Active');
         this.setState({
+            filter: "All",
             tasks: this.state.tasks.filter(task => task.status == 'Active')
         })
     }
 
-    filterList(filter) {
+    setFilter(filter) {
         this.setState({
             filter
         });
@@ -221,7 +228,7 @@ class App extends React.Component {
                 <Footer
                     tasks={this.state.tasks}
                     onClearClick={this.clearTasks}
-                    onFilterClick={this.filterList}
+                    onFilterClick={this.setFilter}
                 />
             </div>
         );
