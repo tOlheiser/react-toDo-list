@@ -74,11 +74,20 @@ class Body extends React.Component {
                         const {description, id} = task;
                         
                         return (
-                            <li className="flex taskItem vert-center" key={id} id={id} onClick={(e) => this.handleTaskClick(e)} 
+                            <div className="flex">
+                            
+                            <li className="flex taskItem space-between" key={id} id={id} onClick={(e) => this.handleTaskClick(e)} 
                             onMouseOver={this.taskMouseOver} onMouseOut={this.taskMouseOut}>
-                            <button className="taskBtn">Toggle Status</button><span className="flex desc">{description}</span>
-                            <button className={`deleteBtn ${this.props.tasks.filter(task => task.id == id)[0].hideDelete ? "hideBtn" : "revealBtn"}`}>Delete</button>
+
+                            <div className="flex vert-center">
+                                <button className="flex taskBtn">Toggle Status</button><span className="flex desc">{description}</span>
+                            </div>
+                            
+                            <div className="flex">
+                                <button className={`deleteBtn flex ${this.props.tasks.filter(task => task.id == id)[0].hideDelete ? "hideBtn" : "revealBtn"}`}>Delete</button>
+                            </div>
                             </li>
+                            </div>
                         )
                     })}
                     
@@ -111,12 +120,13 @@ class Footer extends React.Component {
 
     render() {
         const filter = this.props.filter;
-        console.log(filter);
+        
+        const completedLength = this.props.tasks.filter(({status}) => status == "Completed").length;
 
         return(
             <div className="section center footer">
                 <div className="red flex space-between vert-center">
-                    <div className="flex ">
+                    <div className="flex">
                         <span className="tally">{this.getActiveTasks()} {this.getActiveTasks() != 1 ? 'items' : 'item'} left</span>
                     </div>
                     
@@ -127,7 +137,7 @@ class Footer extends React.Component {
                     </div>
 
                     <div className="flex">
-                        {this.props.tasks.filter(({status}) => status == "Completed").length > 0 && <button className="clear-btn" onClick={this.props.onClearClick}>Clear completed [{this.props.tasks.filter(task => task.status == "Completed").length}]</button>}
+                        <button className={completedLength > 0 ? "clear-btn" : "clear-hide"} onClick={this.props.onClearClick}>Clear completed [{this.props.tasks.filter(task => task.status == "Completed").length}]</button>
                     </div>
                 </div>
             </div>
