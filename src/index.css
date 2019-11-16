@@ -1,13 +1,248 @@
+/* CSS Reset
+ http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+/* Styles */
+
+.container {
+  display: flex;
+  width: 450px;
+  flex-direction: column;
+  margin-top: 25%;
+}
+
+.section {
+  display: flex;
+  width: 100%;
+  padding: 10px 0 10px 0;
+}
+
+.flex {
+  display: flex;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.center {
+  justify-content: center;
+}
+
+.column {
+  flex-direction: column;
+}
+
+.red {
+  width: 95%;
+}
+
+.taskInput {
+  width: 85%;
+  background-color: #63C5AE;
+  color: white;
+  border: none;
+  padding: 8px 0 8px 8px;
+  height: 20px;
+}
+
+.taskSubmit {
+  width: 15%;
+  border: none;
+  background-color: white;
+  color: #63C5AE;
+  font-weight: bold;
+}
+
+.taskSubmit:hover {
+  cursor: pointer;
+  background-color: #ebfaeb;
+}
+
+.flex-end {
+  justify-content: flex-end;
+}
+
+.header {
+  background-color: #2AB99C;
+}
+
+::placeholder {
+  color: white;
+  opacity: .70;
+}
+
+.body {
+  background-color: #E5E9EA;
+  min-height: 300px;
+}
+
+.footer {
+  background-color: #2AB99C;
+}
+
+.btn {
+  border: solid 2px #2AB99C;
+  background-color: transparent;
+  color: #fff;
+  height: 30px;
+  padding-left: 8px;
+  padding-right: 8px
+}
+
+.btn:hover {
+  cursor: pointer;
+  background-color: #63C5AE;
+}
+
+/* Figure out how to give styles to the same too classes. */
+.currentFilter {
+  border: 2px solid #fff;
+  background-color: transparent;
+  color: #fff;
+  height: 30px;
+  padding-left: 8px;
+  padding-right: 8px
+}
+
+.currentFilter:hover {
+  cursor: pointer;
+  background-color: #63C5AE;
+}
+
+.clear-btn {
+  border: none;
+  background-color: transparent;
+  color: #fff;
+  height: 30px;
+}
+
+.clear-btn:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.clear-hide {
+  visibility: hidden;
+}
+
+.vert-center {
+  align-items: center;
+}
+
+.tally {
+  color: #fff;
+}
+
+.around {
+  margin-left: 7px;
+  margin-right: 7px;
+}
+
+.taskItem {
+  background-color: #fff;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  width: 100%;
+}
+
+.taskItem:first-child {
+  margin-bottom: 5px;
+  margin-top: 0;
+}
+
+.taskItem:last-child {
+  margin-bottom: 0;
+  margin-top: 5px;
+}
+
+.taskBtn {
+  background-color: #2AB99C;
+  color: #fff;
+  border: none;
+  height: 30px;
+  padding-left: 8px;
+  padding-right: 8px;
+  cursor: pointer;
+}
+
+.deleteBtn {
+  cursor: pointer;
+  background-color: #2AB99C;
+  color: #fff;
+  border: none;
+  height: 30px;
+  padding-left: 8px;
+  padding-right: 8px
+}
+
+body {
+  background-color: #2C2A3C;
+  display: flex;
+  justify-content: center;
+}
+/* Body Background: #E5E9EA */
+
+.desc {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.revealBtn {
+  visibility: visible;
+}
+
+.hideBtn {
+  visibility: hidden;
+}
+
+.align-end {
+  align-self: flex-end;
 }
