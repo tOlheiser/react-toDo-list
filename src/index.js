@@ -43,6 +43,8 @@ class Body extends React.Component {
 
         this.handleTaskClick = this.handleTaskClick.bind(this);
         this.filterList = this.filterList.bind(this);
+        this.taskMouseOver = this.taskMouseOver.bind(this);
+        this.taskMouseOut = this.taskMouseOut.bind(this);
     }
 
     handleTaskClick(e) {
@@ -54,6 +56,16 @@ class Body extends React.Component {
         return filter === "All" ? tasks : tasks.filter(({status}) => status == filter);
     }
 
+    taskMouseOver(e) {
+        this.props.onTaskMouseOver(e.currentTarget.id);
+        
+    }
+
+    taskMouseOut(e) {
+        this.props.onTaskMouseOut(e.currentTarget.id);
+        
+    }
+
     render() {
         return(
             <div className="section center body">
@@ -62,8 +74,10 @@ class Body extends React.Component {
                         const {description, id} = task;
                         
                         return (
-                            <li className="flex taskItem vert-center" key={id} id={id} onClick={(e) => this.handleTaskClick(e)}>
-                            <button className="taskBtn">Toggle Status</button><span className="flex desc">{description}</span><button className="deleteBtn">Delete</button>
+                            <li className="flex taskItem vert-center" key={id} id={id} onClick={(e) => this.handleTaskClick(e)} 
+                            onMouseOver={this.taskMouseOver} onMouseOut={this.taskMouseOut}>
+                            <button className="taskBtn">Toggle Status</button><span className="flex desc">{description}</span>
+                            <button className={`deleteBtn ${this.props.tasks.filter(task => task.id == id)[0].hideDelete ? "hideBtn" : "revealBtn"}`}>Delete</button>
                             </li>
                         )
                     })}
@@ -96,6 +110,8 @@ class Footer extends React.Component {
     }
 
     render() {
+        const filter = this.props.filter;
+        console.log(filter);
 
         return(
             <div className="section center footer">
@@ -105,9 +121,9 @@ class Footer extends React.Component {
                     </div>
                     
                     <div className="flex">
-                        <button className="btn" onClick={this.handleFilterClick}>All</button>
-                        <button className="btn around" onClick={this.handleFilterClick}>Active</button>
-                        <button className="btn" onClick={this.handleFilterClick}>Completed</button>
+                        <button className={`btn ${filter == "All" ? "currentFilter" : "btn"}`} onClick={this.handleFilterClick}>All</button>
+                        <button className={`btn around ${filter == "Active" ? "currentFilter" : "btn"}`} onClick={this.handleFilterClick}>Active</button>
+                        <button className={`btn ${filter == "Completed" ? "currentFilter": "btn"}`} onClick={this.handleFilterClick}>Completed</button>
                     </div>
 
                     <div className="flex">
@@ -135,6 +151,8 @@ class App extends React.Component {
         this.grabStatus = this.grabStatus.bind(this);
         this.clearTasks = this.clearTasks.bind(this);
         this.setFilter = this.setFilter.bind(this);
+        this.revealDeleteBtn = this.revealDeleteBtn.bind(this);
+        this.hideDeleteBtn = this.hideDeleteBtn.bind(this);
     }
 
     grabStatus(position) {
@@ -164,6 +182,7 @@ class App extends React.Component {
                 counter: counter,
                 value: '', // reset the input.
                 tasks: [...tasks, {
+                    hideDelete: true,
                     id: counter,
                     description,
                     status: "Active"
@@ -208,6 +227,18 @@ class App extends React.Component {
         });
     }
 
+    revealDeleteBtn(id) {
+        this.setState(({tasks}) => ({
+            tasks: tasks.map((task) => task.id == id ? { ...task, hideDelete: false } : task ),
+        }))
+    }
+
+    hideDeleteBtn(id) {
+        this.setState(({tasks}) => ({
+            tasks: tasks.map((task) => task.id == id ? { ...task, hideDelete: true } : task ),
+        }))
+    }
+
     render() {
         return (
             <div className="container">
@@ -221,11 +252,14 @@ class App extends React.Component {
                     filter={this.state.filter}
                     onTaskClick={this.modifyTask}
                     onDeleteClick={this.deleteTask}
+                    onTaskMouseOver={this.revealDeleteBtn}
+                    onTaskMouseOut={this.hideDeleteBtn}
                 />
                 <Footer
                     tasks={this.state.tasks}
                     onClearClick={this.clearTasks}
                     onFilterClick={this.setFilter}
+                    filter={this.state.filter}
                 />
             </div>
         );
