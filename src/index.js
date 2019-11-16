@@ -193,10 +193,10 @@ class App extends React.Component {
 
     modifyTask = (dataFromChild) => {
         let taskId = dataFromChild.currentTarget.id; // Checks for which task the user clicked. 
-        let taskClass = dataFromChild.target.className; // Use this to check if the user clicked on the delete button.
+        let taskClass = dataFromChild.target.innerHTML; // Use this to check if the user clicked on the delete button.
 
         // Did the user click the delete button?
-        if (taskClass == "deleteBtn") {
+        if (taskClass == "Delete") {
             // Create a list which doesn't contain the item the user would like to delete. 
             let newList = this.state.tasks.filter(task => task.id != taskId);
 
