@@ -191,6 +191,9 @@ table {
   margin-top: 5px;
   margin-bottom: 5px;
   width: 100%;
+  -webkit-box-shadow: 2px 2px 3px 0px rgba(0,0,0,0.75);
+-moz-box-shadow: 2px 2px 3px 0px rgba(0,0,0,0.75);
+box-shadow: 2px 2px 3px 0px rgba(0,0,0,0.75);
 }
 
 .taskItem:first-child {
@@ -203,24 +206,34 @@ table {
   margin-top: 5px;
 }
 
+.taskItem:hover {
+  background-color: #F8F8F8;
+}
+
 .taskBtn {
-  background-color: #2AB99C;
-  color: #fff;
+  background-color: transparent;
+  color: #2AB99C;
   border: none;
   height: 30px;
   padding-left: 8px;
-  padding-right: 8px;
+  padding-right: 0;
   cursor: pointer;
+  font-size: 1.2em;
 }
 
 .deleteBtn {
   cursor: pointer;
-  background-color: #2AB99C;
-  color: #fff;
+  background-color: transparent;
+  color: #2C2A3C;
   border: none;
   height: 30px;
   padding-left: 8px;
-  padding-right: 8px
+  padding-right: 10px;
+  font-size: 1em;
+}
+
+.deleteBtn:hover {
+  color: #696969;
 }
 
 body {
@@ -237,10 +250,26 @@ body {
 
 .revealBtn {
   visibility: visible;
+  cursor: pointer;
+  background-color: transparent;
+  color: #2C2A3C;
+  border: none;
+  height: 30px;
+  padding-left: 8px;
+  padding-right: 10px;
+  font-size: 1em;
 }
 
 .hideBtn {
   visibility: hidden;
+  cursor: pointer;
+  background-color: transparent;
+  color: #2C2A3C;
+  border: none;
+  height: 30px;
+  padding-left: 8px;
+  padding-right: 10px;
+  font-size: 1em;
 }
 
 .align-end {
