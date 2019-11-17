@@ -1,6 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheckCircle as regularCircle} from '@fortawesome/free-regular-svg-icons';
+import { faCheckCircle as solidCircle} from '@fortawesome/free-solid-svg-icons';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+
+const completedCheck = <FontAwesomeIcon icon={ solidCircle } />;
+const activeCheck = <FontAwesomeIcon icon={ regularCircle } />;
+const trashIcon = <FontAwesomeIcon icon={ faTrashAlt } />;
 
 class Header extends React.Component {
     constructor(props) {
@@ -67,11 +75,13 @@ class Body extends React.Component {
     }
 
     render() {
+
         return(
             <div className="section center body">
                 <ul className="red flex column">
                 {this.filterList().map((task) => {
-                        const {description, id} = task;
+                        const {description, id, status, hideDelete} = task;
+                        console.log(status);
                         
                         return (
                             <div className="flex">
@@ -80,11 +90,12 @@ class Body extends React.Component {
                             onMouseOver={this.taskMouseOver} onMouseOut={this.taskMouseOut}>
 
                             <div className="flex vert-center">
-                                <button className="flex taskBtn">Toggle Status</button><span className="flex desc">{description}</span>
+                                <button className="flex taskBtn ">{status == "Active" ? activeCheck : completedCheck}</button><span className="flex desc">{description}</span>
                             </div>
                             
                             <div className="flex">
-                                <button className={`deleteBtn flex ${this.props.tasks.filter(task => task.id == id)[0].hideDelete ? "hideBtn" : "revealBtn"}`}>Delete</button>
+                                <button className={hideDelete ? "hideBtn" : "revealBtn"}>{trashIcon}</button>
+                                {/* <button className={`deleteBtn flex ${this.props.tasks.filter(task => task.id == id)[0].hideDelete ? "hideBtn" : "revealBtn"}`}>{trashIcon}</button>*/}
                             </div>
                             </li>
                             </div>
@@ -203,10 +214,12 @@ class App extends React.Component {
 
     modifyTask = (dataFromChild) => {
         let taskId = dataFromChild.currentTarget.id; // Checks for which task the user clicked. 
-        let taskClass = dataFromChild.target.innerHTML; // Use this to check if the user clicked on the delete button.
+        let taskClass = dataFromChild.target.className; // Use this to check if the user clicked on the delete button.
+        let taskNode = dataFromChild.target.nodeName;
+        //console.log(taskClass);
 
         // Did the user click the delete button?
-        if (taskClass == "Delete") {
+        if (taskClass == "hideBtn" || taskClass == "revealBtn" || taskNode == "svg" || taskNode == "path") {
             // Create a list which doesn't contain the item the user would like to delete. 
             let newList = this.state.tasks.filter(task => task.id != taskId);
 
