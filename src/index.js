@@ -81,7 +81,6 @@ class Body extends React.Component {
                 <ul className="red flex column">
                 {this.filterList().map((task) => {
                         const {description, id, status, hideDelete} = task;
-                        console.log(status);
                         
                         return (
                             <div className="flex">
@@ -90,12 +89,12 @@ class Body extends React.Component {
                             onMouseOver={this.taskMouseOver} onMouseOut={this.taskMouseOut}>
 
                             <div className="flex vert-center">
-                                <button className="flex taskBtn ">{status == "Active" ? activeCheck : completedCheck}</button><span className="flex desc">{description}</span>
+                                <button className="flex taskBtn ">{status == "Active" ? activeCheck : completedCheck}</button>
+                                <span className="flex desc">{description}</span>
                             </div>
                             
                             <div className="flex">
                                 <button className={hideDelete ? "hideBtn" : "revealBtn"}>{trashIcon}</button>
-                                {/* <button className={`deleteBtn flex ${this.props.tasks.filter(task => task.id == id)[0].hideDelete ? "hideBtn" : "revealBtn"}`}>{trashIcon}</button>*/}
                             </div>
                             </li>
                             </div>
@@ -174,6 +173,7 @@ class App extends React.Component {
         this.setFilter = this.setFilter.bind(this);
         this.revealDeleteBtn = this.revealDeleteBtn.bind(this);
         this.hideDeleteBtn = this.hideDeleteBtn.bind(this);
+        this.getFontAwesomeElement = this.getFontAwesomeElement.bind(this);
     }
 
     grabStatus(position) {
@@ -212,14 +212,32 @@ class App extends React.Component {
         }) 
     }
 
+    getFontAwesomeElement(node) {
+        //console.log(node.target.parentNode.nodeName);
+        if (node.target.parentNode.nodeName == "DIV") {
+            console.log(node.target.className);
+            return node.target.className;
+
+        } else if (node.target.parentNode.nodeName == "BUTTON") {
+            console.log(node.target.parentElement.className)
+            return node.target.parentElement.className;
+
+        } else if (node.target.parentNode.nodeName == "svg") {
+            node = node.target.parentElement;
+            node = node.parentElement.className;
+            console.log(node);
+            return node;
+        } 
+    }
+
+
     modifyTask = (dataFromChild) => {
-        let taskId = dataFromChild.currentTarget.id; // Checks for which task the user clicked. 
-        let taskClass = dataFromChild.target.className; // Use this to check if the user clicked on the delete button.
-        let taskNode = dataFromChild.target.nodeName;
-        //console.log(taskClass);
+        // Checks for which task the user clicked. 
+        let taskId = dataFromChild.currentTarget.id; 
+        let trashClass = this.getFontAwesomeElement(dataFromChild);
 
         // Did the user click the delete button?
-        if (taskClass == "hideBtn" || taskClass == "revealBtn" || taskNode == "svg" || taskNode == "path") {
+        if (trashClass == "hideBtn" || trashClass == "revealBtn") {
             // Create a list which doesn't contain the item the user would like to delete. 
             let newList = this.state.tasks.filter(task => task.id != taskId);
 
