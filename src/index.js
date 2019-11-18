@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import './reset.css';
 import './index.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle as regularCircle} from '@fortawesome/free-regular-svg-icons';
@@ -36,7 +37,7 @@ class Header extends React.Component {
             <div className="section center header">
                 <form onSubmit={this.handleSubmit} className="flex red">
                     
-                        <input type="text" placeholder="Enter a task" value={this.props.value} onChange={this.handleChange} className="taskInput" />
+                        <input type="text" placeholder="Enter a task" value={this.props.value} maxLength="36" onChange={this.handleChange} className="taskInput" />
                     
                     <input type="submit" value="Submit" className="taskSubmit" disabled={!isEnabled}/>
                 </form>
@@ -90,7 +91,7 @@ class Body extends React.Component {
 
                             <div className="flex vert-center">
                                 <button className="flex taskBtn ">{status == "Active" ? activeCheck : completedCheck}</button>
-                                <span className="flex desc">{description}</span>
+                                <span className={`flex ${status == "Active" ? "activeDesc" : "completedDesc"}`}>{description}</span>
                             </div>
                             
                             <div className="flex">
@@ -213,19 +214,15 @@ class App extends React.Component {
     }
 
     getFontAwesomeElement(node) {
-        //console.log(node.target.parentNode.nodeName);
         if (node.target.parentNode.nodeName == "DIV") {
-            console.log(node.target.className);
             return node.target.className;
 
         } else if (node.target.parentNode.nodeName == "BUTTON") {
-            console.log(node.target.parentElement.className)
             return node.target.parentElement.className;
 
         } else if (node.target.parentNode.nodeName == "svg") {
             node = node.target.parentElement;
             node = node.parentElement.className;
-            console.log(node);
             return node;
         } 
     }
