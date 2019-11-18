@@ -171,6 +171,9 @@ this.setState({
 * Raise the limit of max character to have the words wrap, creating a larger list item.
 * Consider including a down arrow on the left side of the text input. Clicking on it will check all tasks as completed. 
 * Modify the submit styles when it was set to disabled.
+* Make the CSS style naming conventions more consistent.
+* Organize stylesheet.
+* See if I can make the reveal/hide delBtn one function.
 
 ## Knowledge gaps encountered during this project
 * The spread operator, and how it was used to add a new task.
