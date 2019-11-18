@@ -1,11 +1,15 @@
+// import React
 import React from 'react';
 import ReactDOM from 'react-dom';
+
+// import styles
 import './reset.css';
 import './index.css';
+
+// import fontAwesome
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle as regularCircle} from '@fortawesome/free-regular-svg-icons';
-import { faCheckCircle as solidCircle} from '@fortawesome/free-solid-svg-icons';
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle as solidCircle, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
 
 const completedCheck = <FontAwesomeIcon icon={ solidCircle } />;
 const activeCheck = <FontAwesomeIcon icon={ regularCircle } />;
@@ -23,13 +27,18 @@ class Header extends React.Component {
         this.props.onInputChange(event.target.value);
     }
 
+    // When submit is clicked, it invokes this function.
     handleSubmit(event) {
+        // prevent default behaviour when you click submit.
         event.preventDefault();
       
+        // When handleSubmit is invoked, it calls 'onSubmit()' 
+        // which references another function that was passed in as props.
         this.props.onSubmit();
     }
 
     render() {
+        // Used destructuring to grab 'value' from this.props and store it in a variable.
         const { value } = this.props;
         const isEnabled = value.length > 0;
 
@@ -37,7 +46,7 @@ class Header extends React.Component {
             <div className="section center header">
                 <form onSubmit={this.handleSubmit} className="flex red">
                     
-                        <input type="text" placeholder="Enter a task" value={this.props.value} maxLength="36" onChange={this.handleChange} className="taskInput" />
+                        <input type="text" placeholder="Enter a task" value={value} maxLength="36" onChange={this.handleChange} className="taskInput" />
                     
                     <input type="submit" value="Submit" className="taskSubmit" disabled={!isEnabled}/>
                 </form>
@@ -51,28 +60,30 @@ class Body extends React.Component {
         super(props);
 
         this.handleTaskClick = this.handleTaskClick.bind(this);
+        this.handleTaskMouseOver = this.handleTaskMouseOver.bind(this);
+        this.handleTaskMouseOut = this.handleTaskMouseOut.bind(this);
         this.filterList = this.filterList.bind(this);
-        this.taskMouseOver = this.taskMouseOver.bind(this);
-        this.taskMouseOut = this.taskMouseOut.bind(this);
     }
 
+    /* Events */
     handleTaskClick(e) {
         this.props.onTaskClick(e);
     }
 
-    filterList() {
-        const { filter, tasks} = this.props;
-        return filter === "All" ? tasks : tasks.filter(({status}) => status == filter);
-    }
-
-    taskMouseOver(e) {
+    handleTaskMouseOver(e) {
         this.props.onTaskMouseOver(e.currentTarget.id);
         
     }
 
-    taskMouseOut(e) {
+    handleTaskMouseOut(e) {
         this.props.onTaskMouseOut(e.currentTarget.id);
         
+    }
+
+    filterList() {
+        const { filter, tasks} = this.props;
+        // If the filter is all, leave tasks as is. Otherwise, return an array of tasks which match the filter chosen.
+        return filter === "All" ? tasks : tasks.filter(({status}) => status == filter);
     }
 
     render() {
@@ -80,24 +91,25 @@ class Body extends React.Component {
         return(
             <div className="section center body">
                 <ul className="red flex column">
-                {this.filterList().map((task) => {
+                {// Mapping over the filtered list to produce task items.
+                    this.filterList().map((task) => {
                         const {description, id, status, hideDelete} = task;
                         
                         return (
                             <div className="flex">
                             
-                            <li className="flex taskItem space-between" key={id} id={id} onClick={(e) => this.handleTaskClick(e)} 
-                            onMouseOver={this.taskMouseOver} onMouseOut={this.taskMouseOut}>
+                                <li className="flex taskItem space-between" key={id} id={id} onClick={(e) => this.handleTaskClick(e)} 
+                                onMouseOver={this.handleTaskMouseOver} onMouseOut={this.handleTaskMouseOut}>
 
-                            <div className="flex vert-center">
-                                <button className="flex taskBtn ">{status == "Active" ? activeCheck : completedCheck}</button>
-                                <span className={`flex ${status == "Active" ? "activeDesc" : "completedDesc"}`}>{description}</span>
-                            </div>
+                                    <div className="flex vert-center">
+                                        <button className="flex taskBtn">{status == "Active" ? activeCheck : completedCheck}</button>
+                                        <span className={`flex ${status == "Active" ? "activeDesc" : "completedDesc"}`}>{description}</span>
+                                    </div>
                             
-                            <div className="flex">
-                                <button className={hideDelete ? "hideBtn" : "revealBtn"}>{trashIcon}</button>
-                            </div>
-                            </li>
+                                    <div className="flex">
+                                        <button className={hideDelete ? "hideBtn" : "revealBtn"}>{trashIcon}</button>
+                                    </div>
+                                </li>
                             </div>
                         )
                     })}
@@ -112,13 +124,9 @@ class Footer extends React.Component {
     constructor(props) {
         super(props);
 
-        this.getActiveTasks = this.getActiveTasks.bind(this);
         this.handleClearClick = this.handleClearClick.bind(this);
         this.handleFilterClick = this.handleFilterClick.bind(this);
-    }
-
-    getActiveTasks() {
-        return this.props.tasks.filter(task => task.status == "Active").length;
+        this.getTaskLength = this.getTaskLength.bind(this);
     }
 
     handleClearClick() {
@@ -129,26 +137,29 @@ class Footer extends React.Component {
         this.props.onFilterClick(event.target.innerHTML);
     }
 
+    getTaskLength(taskStatus) {
+        return this.props.tasks.filter(({status}) => status == taskStatus).length;
+    }
+
     render() {
-        const filter = this.props.filter;
-        
-        const completedLength = this.props.tasks.filter(({status}) => status == "Completed").length;
+        const {filter, tasks} = this.props;
 
         return(
             <div className="section center footer">
                 <div className="red flex space-between vert-center">
                     <div className="flex">
-                        <span className="tally">{this.getActiveTasks()} {this.getActiveTasks() != 1 ? 'items' : 'item'} left</span>
+                        <span className="tally">{this.getTaskLength("Active")} {this.getTaskLength("Active") != 1 ? 'items' : 'item'} left</span>
                     </div>
                     
                     <div className="flex">
-                        <button className={`btn ${filter == "All" ? "currentFilter" : "btn"}`} onClick={this.handleFilterClick}>All</button>
-                        <button className={`btn around ${filter == "Active" ? "currentFilter" : "btn"}`} onClick={this.handleFilterClick}>Active</button>
-                        <button className={`btn ${filter == "Completed" ? "currentFilter": "btn"}`} onClick={this.handleFilterClick}>Completed</button>
+                        <button className={`${filter == "All" ? "currentFilter" : "btn"}`} onClick={this.handleFilterClick}>All</button>
+                        <button className={`around ${filter == "Active" ? "currentFilter" : "btn"}`} onClick={this.handleFilterClick}>Active</button>
+                        <button className={`${filter == "Completed" ? "currentFilter": "btn"}`} onClick={this.handleFilterClick}>Completed</button>
                     </div>
 
                     <div className="flex">
-                        <button className={completedLength > 0 ? "clear-btn" : "clear-hide"} onClick={this.props.onClearClick}>Clear completed [{this.props.tasks.filter(task => task.status == "Completed").length}]</button>
+                        <button className={this.getTaskLength("Completed") > 0 ? "clear-btn" : "clear-hide"} 
+                        onClick={this.props.onClearClick}>Clear completed [{this.getTaskLength("Completed")}]</button>
                     </div>
                 </div>
             </div>
@@ -169,7 +180,7 @@ class App extends React.Component {
         this.handleInputChange = this.handleInputChange.bind(this);
         this.onTaskSubmit = this.onTaskSubmit.bind(this);
         this.modifyTask = this.modifyTask.bind(this);
-        this.grabStatus = this.grabStatus.bind(this);
+        this.getStatus = this.getStatus.bind(this);
         this.clearTasks = this.clearTasks.bind(this);
         this.setFilter = this.setFilter.bind(this);
         this.revealDeleteBtn = this.revealDeleteBtn.bind(this);
@@ -177,14 +188,10 @@ class App extends React.Component {
         this.getFontAwesomeElement = this.getFontAwesomeElement.bind(this);
     }
 
-    grabStatus(position) {
-        let currentTask = this.state.tasks.filter(task => task.id == position);
+    getStatus(position) {
+        let currentTask = this.state.tasks.filter(task => task.id == position)[0];
 
-        if (currentTask[0].status === "Active") {
-            return "Completed";
-        } else {
-            return "Active";
-        } 
+        return currentTask.status === "Active" ? "Completed" : "Active";
     }
 
     handleInputChange(input) {
@@ -197,6 +204,7 @@ class App extends React.Component {
         
         // store the user input.
         const description = this.state.value;
+        // Counter is used to generate unique keys & id's.
         const counter = this.state.counter + 1;
 
         this.setState(({tasks}) => {
@@ -208,12 +216,13 @@ class App extends React.Component {
                     id: counter,
                     description,
                     status: "Active"
-                }] // Add ID
+                }]
             }
         }) 
     }
 
     getFontAwesomeElement(node) {
+        // Convuluted solution to return the className from the FontAwesome element.
         if (node.target.parentNode.nodeName == "DIV") {
             return node.target.className;
 
@@ -246,8 +255,8 @@ class App extends React.Component {
         } else {
             this.setState(({tasks}) => ({
                 // Map over the tasks and check to see if the task ID is equal to the value passed in.
-                // If it is equal, toggle the status by using the 'grabStatus' function.
-                tasks: tasks.map((task) => (task.id == taskId ? { ...task, status: this.grabStatus(taskId) } : task)),
+                // If it is equal, toggle the status by using the 'getStatus' function.
+                tasks: tasks.map((task) => (task.id == taskId ? { ...task, status: this.getStatus(taskId) } : task)),
             }));
         }
     }
@@ -255,6 +264,7 @@ class App extends React.Component {
     clearTasks() {
         this.setState({
             filter: "All",
+            // Get a list of only the active tasks and apply it to the tasks object.
             tasks: this.state.tasks.filter(task => task.status == "Active")
         })
     }
