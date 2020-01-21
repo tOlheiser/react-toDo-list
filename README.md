@@ -41,5 +41,5 @@ Clicking anywhere on an item (except for the trash can) will toggle it between '
     <Footer/>
 ```
 
-If the body doesn't contain any tasks, do not render the Body or Footer components. 
+If the body doesn't contain any tasks, do not render the Body or Footer components. *Use 'return null'* 
 * Need to figure out how to check to see if a parent component has any child components. 
